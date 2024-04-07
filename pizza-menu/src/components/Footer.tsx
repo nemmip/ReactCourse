@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
   return (
     <Fragment>
       <footer className="footer">
-        {isRestaurantOpen && (
+        {isRestaurantOpen ? (
           <div className="order">
             <p>
               We're open until {openingHours.close}:00. Come visit us or order
@@ -20,6 +20,11 @@ const Footer: React.FC = () => {
             </p>
             <button className="btn">Order</button>
           </div>
+        ) : (
+          <p>
+            We're happy to welcome you between {openingHours.open}:00 and{" "}
+            {openingHours.close}:00.
+          </p>
         )}
       </footer>
     </Fragment>
