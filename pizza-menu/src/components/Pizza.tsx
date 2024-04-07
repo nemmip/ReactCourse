@@ -1,13 +1,16 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PizzaProps from "../types/Pizza/Pizza";
 
 const Pizza: React.FC<PizzaProps> = (props) => {
   return (
-    <Fragment>
+    <div className="pizza">
       <img src={props.photoName} alt={props.name} />
-      <h3>{props.name}</h3>
-      <p>{props.ingredients}</p>
-    </Fragment>
+      <div>
+        <h3>{props.name}</h3>
+        <p>{props.ingredients}</p>
+        <span>{props.price}</span>
+      </div>
+    </div>
   );
 };
 
