@@ -9,12 +9,19 @@ const Menu: React.FC = () => {
   return (
     <main className="menu">
       <h2>Our menu</h2>
+
       {isPizzaEmpty ? (
-        <ul className="pizzas">
-          {pizzaList.map((pizza) => (
-            <Pizza key={pizza.name} {...pizza} />
-          ))}
-        </ul>
+        <>
+          <p>
+            Authentic italian cuisine. 6 creative dishes to choose from. All
+            from our stone over, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzaList.map((pizza) => (
+              <Pizza key={pizza.name} {...pizza} />
+            ))}
+          </ul>
+        </>
       ) : (
         <p>We're still working on our menu. Please come back later :)</p>
       )}

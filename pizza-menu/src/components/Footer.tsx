@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
+import Order from "./Order";
+import OrderProps from "../types/OrderProps";
 
 const Footer: React.FC = () => {
   const hour = new Date().getHours();
-  const openingHours = {
+  const openingHours: OrderProps = {
     open: 12,
     close: 22,
   };
@@ -13,13 +15,7 @@ const Footer: React.FC = () => {
     <Fragment>
       <footer className="footer">
         {isRestaurantOpen ? (
-          <div className="order">
-            <p>
-              We're open until {openingHours.close}:00. Come visit us or order
-              online.
-            </p>
-            <button className="btn">Order</button>
-          </div>
+          <Order {...openingHours} />
         ) : (
           <p>
             We're happy to welcome you between {openingHours.open}:00 and{" "}
