@@ -1,12 +1,15 @@
-import React from "react";
-import PizzaList from "./Pizza/PizzaList";
+import React, { Fragment } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Menu from "./Menu";
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Hello React</h1>
-      <PizzaList />
-    </div>
+    <Fragment>
+      <Header />
+      <Menu />
+      <Footer />
+    </Fragment>
   );
 };
 

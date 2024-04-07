@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import PizzaListState from "../types/Pizza/PizzaListState";
+import MenuState from "../types/Pizza/MenuState";
 
-const pizzaListStore = create<PizzaListState>((set) => ({
+const menuStore = create<MenuState>((set) => ({
   pizzaList: [
     {
       name: "Focaccia",
@@ -48,4 +48,4 @@ const pizzaListStore = create<PizzaListState>((set) => ({
   ],
 }));
 
-export default pizzaListStore;
+export default menuStore;

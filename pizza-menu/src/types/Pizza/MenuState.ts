@@ -1,5 +1,5 @@
 import Pizza from "./Pizza";
 
-export default interface PizzaListState {
+export default interface MenuState {
   pizzaList: Pizza[];
 }
