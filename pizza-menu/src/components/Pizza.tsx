@@ -2,6 +2,10 @@ import React from "react";
 import PizzaProps from "../types/Pizza/Pizza";
 
 const Pizza: React.FC<PizzaProps> = (props) => {
+  if (props.soldOut) {
+    return null;
+  }
+
   return (
     <li className="pizza">
       <img src={props.photoName} alt={props.name} />
