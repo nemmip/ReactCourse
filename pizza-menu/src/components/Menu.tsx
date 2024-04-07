@@ -7,9 +7,11 @@ const Menu: React.FC = () => {
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      {pizzaList.map((pizza) => (
-        <Pizza key={pizza.name} {...pizza} />
-      ))}
+      <ul className="pizzas">
+        {pizzaList.map((pizza) => (
+          <Pizza key={pizza.name} {...pizza} />
+        ))}
+      </ul>
     </main>
   );
 };

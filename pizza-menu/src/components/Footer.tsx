@@ -12,7 +12,15 @@ const Footer: React.FC = () => {
   return (
     <Fragment>
       <footer className="footer">
-        {new Date().toLocaleTimeString()} We're currently open!
+        {isRestaurantOpen && (
+          <div className="order">
+            <p>
+              We're open until {openingHours.close}:00. Come visit us or order
+              online.
+            </p>
+            <button className="btn">Order</button>
+          </div>
+        )}
       </footer>
     </Fragment>
   );
