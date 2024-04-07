@@ -5,7 +5,7 @@ const Pizza: React.FC<PizzaProps> = (props) => {
   return (
     <Fragment>
       <img src={props.photoName} alt={props.name} />
-      <h2>{props.name}</h2>
+      <h3>{props.name}</h3>
       <p>{props.ingredients}</p>
     </Fragment>
   );

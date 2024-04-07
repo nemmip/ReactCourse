@@ -1,15 +1,15 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Menu from "./Menu";
 
 const App: React.FC = () => {
   return (
-    <Fragment>
+    <div className="container">
       <Header />
       <Menu />
       <Footer />
-    </Fragment>
+    </div>
   );
 };
 
