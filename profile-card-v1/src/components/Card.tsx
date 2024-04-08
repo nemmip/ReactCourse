@@ -1,25 +1,25 @@
 import React from "react";
-import SkillProps from "../types/SkillProps";
+import { LevelEnum, SkillProps } from "../types/SkillProps";
 import Skill from "./Skill";
 
 const Card: React.FC = () => {
   const skills: SkillProps[] = [
-    { name: "Typescript", icon: "💪", color: "#79ea85" },
-    { name: "Javascript", icon: "💪", color: "#b1e269" },
-    { name: "NestJS", icon: "💪", color: "#2aa099" },
-    { name: "NodeJS", icon: "💪", color: "#b12de7" },
-    { name: "C#", icon: "👍", color: "#347453" },
-    { name: "Python", icon: "💪", color: "#a6c649" },
-    { name: "Flask", icon: "👍", color: "#9ff0f4" },
-    { name: "REST API", icon: "💪", color: "#caf023" },
-    { name: "GraphQL", icon: "💪", color: "#edb00c" },
-    { name: "Microservices", icon: "💪", color: "#d8c050" },
-    { name: "React", icon: "👍", color: "#f25950" },
-    { name: "Angular", icon: "👍", color: "#e49b12" },
-    { name: "MySQL", icon: "💪", color: "#02ad5f" },
-    { name: "Cybersecurity", icon: "👶", color: "#427290" },
-    { name: "SQL", icon: "💪", color: "#c2e5c8" },
-    { name: "Git", icon: "💪", color: "#4a66ef" },
+    { name: "Typescript", level: LevelEnum.advanced, color: "#79ea85" },
+    { name: "Javascript", level: LevelEnum.advanced, color: "#b1e269" },
+    { name: "NestJS", level: LevelEnum.advanced, color: "#2aa099" },
+    { name: "NodeJS", level: LevelEnum.advanced, color: "#b12de7" },
+    { name: "C#", level: LevelEnum.intermediate, color: "#347453" },
+    { name: "Python", level: LevelEnum.advanced, color: "#a6c649" },
+    { name: "Flask", level: LevelEnum.intermediate, color: "#9ff0f4" },
+    { name: "REST API", level: LevelEnum.advanced, color: "#caf023" },
+    { name: "GraphQL", level: LevelEnum.advanced, color: "#edb00c" },
+    { name: "Microservices", level: LevelEnum.advanced, color: "#d8c050" },
+    { name: "React", level: LevelEnum.intermediate, color: "#f25950" },
+    { name: "Angular", level: LevelEnum.intermediate, color: "#e49b12" },
+    { name: "MySQL", level: LevelEnum.advanced, color: "#02ad5f" },
+    { name: "Cybersecurity", level: LevelEnum.beginner, color: "#427290" },
+    { name: "SQL", level: LevelEnum.advanced, color: "#c2e5c8" },
+    { name: "Git", level: LevelEnum.advanced, color: "#4a66ef" },
   ];
   return (
     <div className="card">
@@ -34,7 +34,7 @@ const Card: React.FC = () => {
         </p>
         <div className="skill-list">
           {skills.map((skill) => (
-            <Skill {...skill} />
+            <Skill key={skill.name} {...skill} />
           ))}
         </div>
       </div>
