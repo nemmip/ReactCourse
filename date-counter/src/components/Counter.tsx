@@ -1,17 +1,23 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 
 const Counter: React.FC<{
-  title: string;
   counter: number;
   handleAddition: () => void;
   handleSubtraction: () => void;
-}> = ({ title, counter, handleAddition, handleSubtraction }) => {
+  onChange: React.Dispatch<SetStateAction<number>>;
+}> = ({ counter, handleAddition, handleSubtraction, onChange }) => {
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const numberValue = Number(event.target.value);
+    if (isNaN(numberValue)) {
+      onChange(0);
+    } else {
+      onChange(numberValue);
+    }
+  };
   return (
     <div style={{ display: "flex" }}>
       <button onClick={handleSubtraction}>-</button>
-      <h4>
-        {title}: {counter}
-      </h4>
+      <input defaultValue={0} value={counter} onChange={handleChangeInput} />
       <button onClick={handleAddition}>+</button>
     </div>
   );

@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import Counter from "./Counter.tsx";
 import DateCalculation from "./DateCalculation.tsx";
+import Slider from "./Slider.tsx";
 
 const DateCounter: React.FC = () => {
   const [stepCounter, setStepCounter] = useState(1);
   const [counter, setCounter] = useState(0);
-
-  const handleStepAddition = () => {
-    setStepCounter((c) => c + 1);
-  };
-
-  const handleStepSubstraction = () => {
-    setStepCounter((c) => c - 1);
-  };
 
   const handleCounterAddition = () => {
     setCounter((c) => c + stepCounter);
@@ -20,6 +13,11 @@ const DateCounter: React.FC = () => {
 
   const handleCounterSubstraction = () => {
     setCounter((c) => c - stepCounter);
+  };
+
+  const handleResetState = () => {
+    setCounter(0);
+    setStepCounter(1);
   };
   return (
     <div
@@ -32,19 +30,17 @@ const DateCounter: React.FC = () => {
         width: "100%",
       }}
     >
+      <Slider counter={stepCounter} onChange={setStepCounter} />
       <Counter
-        title="Step"
-        counter={stepCounter}
-        handleAddition={handleStepAddition}
-        handleSubtraction={handleStepSubstraction}
-      />
-      <Counter
-        title="Count"
         counter={counter}
         handleSubtraction={handleCounterSubstraction}
         handleAddition={handleCounterAddition}
+        onChange={setCounter}
       />
       <DateCalculation counter={counter} />
+      {(stepCounter !== 1 || counter !== 0) && (
+        <button onClick={handleResetState}>Reset</button>
+      )}
     </div>
   );
 };
