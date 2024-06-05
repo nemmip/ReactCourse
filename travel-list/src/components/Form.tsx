@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { Item } from "../typing/item.ts";
 
 const arrayOfNumbers = Array.from({ length: 20 }, (_, i) => i + 1);
-const Form: React.FC = () => {
+const Form: React.FC<{ onAddItems: (item: Item) => void }> = ({
+  onAddItems,
+}) => {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(arrayOfNumbers[0]);
 
@@ -11,7 +14,7 @@ const Form: React.FC = () => {
     if (!description) return;
 
     const newItem = { description, quantity, packed: false, id: Date.now() };
-
+    onAddItems(newItem);
     setQuantity(arrayOfNumbers[0]);
     setDescription("");
   };
