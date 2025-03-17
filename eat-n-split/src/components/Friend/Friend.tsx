@@ -1,3 +1,6 @@
+import React from "react";
+import Button from "../Button.tsx";
+
 export interface IFriend {
     id: number;
     name: string;
@@ -5,7 +8,9 @@ export interface IFriend {
     balance: number;
 }
 
-const Friend = (friend: IFriend) => {
+const Friend: React.FC<{
+    friend: IFriend
+}> = ({friend}) => {
     return (
         <li>
             <img src={friend.image} alt={friend.name} />
@@ -24,7 +29,7 @@ const Friend = (friend: IFriend) => {
                 <p> You and {friend.name} are even</p>
             }
 
-            <button className="button">Select</button>
+            <Button>Select</Button>
         </li>
     );
 };
