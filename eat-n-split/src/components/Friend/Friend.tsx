@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../Button.tsx";
 
 export interface IFriend {
-    id: number;
+    id: number|string;
     name: string;
     image: string;
     balance: number;
