@@ -9,10 +9,14 @@ export interface IFriend {
 }
 
 const Friend: React.FC<{
-    friend: IFriend
-}> = ({friend}) => {
+    friend: IFriend,
+    onFriendSelect: (friend: IFriend | null) => void;
+    selectedFriend: IFriend | null;
+}> = ({friend, onFriendSelect, selectedFriend}) => {
+    const isSelected = friend.id === selectedFriend?.id;
+
     return (
-        <li>
+        <li className={isSelected ? 'selected' : ''}>
             <img src={friend.image} alt={friend.name} />
             <h3>{friend.name}</h3>
 
@@ -29,7 +33,7 @@ const Friend: React.FC<{
                 <p> You and {friend.name} are even</p>
             }
 
-            <Button>Select</Button>
+            <Button onClick={()=>onFriendSelect(friend)}>{isSelected ? "Close" : "Select"}</Button>
         </li>
     );
 };
