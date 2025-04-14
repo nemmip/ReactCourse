@@ -1,10 +1,11 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 import Button from "./Button.tsx";
 import {IFriend} from "./Friend/Friend.tsx";
 
 const FormSplitBill: React.FC<{
     selectedFriend: IFriend;
-}> = ({selectedFriend}) => {
+    onSplitBill: (value: number) => void;
+}> = ({selectedFriend, onSplitBill}) => {
     const [bill, setBill] = useState<number|string>('');
     const [paidByUser, setPaidByUser] = useState<number|string>('');
     const [whoIsPaying, setWhoIsPaying] = useState('user');
@@ -17,8 +18,16 @@ const FormSplitBill: React.FC<{
             setPaidByUser(Number(event.target.value))
         }
     }
+
+    const handleSubmit= (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if(!bill || !paidByUser) return;
+        onSplitBill(whoIsPaying === 'user' ? Number(paidByFriend) : -Number(paidByUser));
+    }
+
     return (
-        <form className="form-split-bill">
+        <form className="form-split-bill" onSubmit={handleSubmit}>
             <h2>Split a bill with {selectedFriend.name}</h2>
 
             <label>💰 Bill value</label>
