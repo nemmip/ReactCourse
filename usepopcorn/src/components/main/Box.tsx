@@ -1,6 +1,6 @@
 import React, {ReactNode, useState} from 'react';
 
-const ListBox: React.FC<{
+const Box: React.FC<{
     children: ReactNode;
 }> = ({children}) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -19,4 +19,4 @@ const ListBox: React.FC<{
     );
 };
 
-export default ListBox;
+export default Box;
