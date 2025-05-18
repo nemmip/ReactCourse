@@ -45,7 +45,6 @@ const App = () => {
             friend.id === selectedFriend?.id ?
                 {...friend, balance: friend.balance + value} :
                 friend))
-
         setSelectedFriend(null);
     }
 
@@ -62,7 +61,8 @@ const App = () => {
                     {showAddFriend ? 'Close':  'Add friend'}
                 </Button>
             </div>
-            {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} onSplitBill={handleSplitBill}/>}
+            {selectedFriend &&
+                <FormSplitBill key = {selectedFriend.id} selectedFriend={selectedFriend} onSplitBill={handleSplitBill}/>}
         </div>
     );
 };
