@@ -7,8 +7,17 @@ const TabContent:React.FC<{
     const [showDetails, setShowDetails] = useState<boolean>(true);
     const [likes, setLikes] = useState<number>(0);
 
-    function handleInc() {
-        setLikes(likes + 1);
+    function handleInc(increment:number = 1) {
+        setLikes(likes => likes + increment);
+    }
+
+    function handleUndo() {
+        setShowDetails(true);
+        setLikes(0);
+    }
+
+    function handleUndoLater(){
+        setTimeout(handleUndo, 2000);
     }
 
     return (
@@ -23,14 +32,14 @@ const TabContent:React.FC<{
 
                 <div className="hearts-counter">
                     <span>{likes} ❤️</span>
-                    <button onClick={handleInc}>+</button>
-                    <button>+++</button>
+                    <button onClick={()=>handleInc()}>+</button>
+                    <button onClick={()=> handleInc(3)}>+++</button>
                 </div>
             </div>
 
             <div className="tab-undo">
-                <button>Undo</button>
-                <button>Undo in 2s</button>
+                <button onClick={handleUndo}>Undo</button>
+                <button onClick={handleUndoLater}>Undo in 2s</button>
             </div>
         </div>
     );
