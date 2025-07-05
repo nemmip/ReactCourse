@@ -4,9 +4,11 @@ import {Movie} from "../../../interfaces/Movie.ts";
 const MovieItem: React.FC<
     {
         movie: Movie;
-    }> = ({movie}) => {
+        onClick: (id: string)=>void
+    }> = ({movie, onClick}) => {
+
     return (
-        <li>
+        <li onClick={()=>onClick(movie.imdbID)}>
             <img src={movie.Poster} alt={`${movie.Title} poster`} />
             <h3>{movie.Title}</h3>
             <div>

@@ -11,31 +11,9 @@ import Loader from "./components/common/Loader.tsx";
 import ErrorMessage from "./components/common/ErrorMessage.tsx";
 import Search from "./components/navbar/Search.tsx";
 import {Movie} from "./interfaces/Movie.ts";
+import MovieDetails from "./components/main/movie-list/MovieDetails.tsx";
 
 const KEY = '6b0f4c12'
-const tempMovieData = [
-    {
-        imdbID: "tt1375666",
-        Title: "Inception",
-        Year: "2010",
-        Poster:
-            "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    },
-    {
-        imdbID: "tt0133093",
-        Title: "The Matrix",
-        Year: "1999",
-        Poster:
-            "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-    },
-    {
-        imdbID: "tt6751668",
-        Title: "Parasite",
-        Year: "2019",
-        Poster:
-            "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-    },
-];
 
 const tempWatchedData = [
     {
@@ -97,6 +75,7 @@ export const App: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [query, setQuery] = useState<string>("");
+    const [selectedId, setSelectedId] = useState<string | null>(null);
 
 
     useEffect(function () {
@@ -108,6 +87,13 @@ export const App: React.FC = () => {
         fetchMovies(query, setMovies, setIsLoading, setError);
     }, [query])
 
+    const handleSelectMovie = (id: string) => {
+        setSelectedId(selectedId => selectedId === id ? null : selectedId);
+    }
+    const handleCloseMovie = () => {
+        setSelectedId(null);
+    }
+
     return (
         <>
             <NavBar>
@@ -117,12 +103,17 @@ export const App: React.FC = () => {
             <Main>
                 <Box>
                     {isLoading && <Loader/>}
-                    {!isLoading && !error && <MovieList movies={movies}/>}
+                    {!isLoading && !error && <MovieList movies={movies} onMovieSelected={handleSelectMovie}/>}
                     {error && <ErrorMessage message={error}/>}
                 </Box>
                 <Box>
-                    <Summary watched={watched}/>
-                    <WatchedMoviesList watched={watched}/>
+                    {
+                        selectedId ? <MovieDetails selectedId={selectedId} onClose={handleCloseMovie}/> : <>
+                            <Summary
+                            watched={watched}/>
+                            <WatchedMoviesList watched={watched}/>
+                        </>
+                    }
                 </Box>
             </Main>
         </>
