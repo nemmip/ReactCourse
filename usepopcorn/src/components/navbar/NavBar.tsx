@@ -1,6 +1,5 @@
 import React, {ReactNode} from 'react';
 import Logo from "./Logo.tsx";
-import Search from "./Search.tsx";
 
 const NavBar : React.FC<{
     children: ReactNode;
@@ -10,7 +9,6 @@ const NavBar : React.FC<{
     return (
         <nav className="nav-bar">
             <Logo/>
-            <Search/>
             {children}
         </nav>
 

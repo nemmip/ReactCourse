@@ -9,6 +9,8 @@ import Summary from "./components/main/watched-movies-list/Summary.tsx";
 import WatchedMoviesList from "./components/main/watched-movies-list/WatchedMoviesList.tsx";
 import Loader from "./components/common/Loader.tsx";
 import ErrorMessage from "./components/common/ErrorMessage.tsx";
+import Search from "./components/navbar/Search.tsx";
+import {Movie} from "./interfaces/Movie.ts";
 
 const KEY = '6b0f4c12'
 const tempMovieData = [
@@ -60,10 +62,12 @@ const tempWatchedData = [
 
 async function fetchMovies(
     query: string,
-    callback: React.Dispatch<React.SetStateAction<[]>>,
+    callback: React.Dispatch<React.SetStateAction<Movie[]>>,
     loadingCallback: React.Dispatch<React.SetStateAction<boolean>>,
     errorCallback: React.Dispatch<React.SetStateAction<string>>,) {
+
     loadingCallback(true)
+    errorCallback("")
 
     try {
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
@@ -74,12 +78,12 @@ async function fetchMovies(
 
         const data = await res.json();
 
-        if (data.Response === 'False'){
+        if (data.Response === 'False') {
             throw new Error("Movie not found.");
         }
 
         callback(data.Search);
-    } catch(err) {
+    } catch (err) {
         console.error(err.message);
         errorCallback(err.message);
     } finally {
@@ -88,20 +92,26 @@ async function fetchMovies(
 }
 
 export const App: React.FC = () => {
-    const [movies, setMovies] = useState<[]>([]);
+    const [movies, setMovies] = useState<Movie[]>([]);
     const [watched, setWatched] = useState<[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [query, setQuery] = useState<string>("");
 
-    const query = "adwadawfegrsgseg"
 
     useEffect(function () {
+        if (query.length < 3) {
+            setMovies([]);
+            setError("");
+            return;
+        }
         fetchMovies(query, setMovies, setIsLoading, setError);
-    }, [])
+    }, [query])
 
     return (
         <>
             <NavBar>
+                <Search query={query} setQuery={setQuery}/>
                 <NumResults moviesLength={movies.length}/>
             </NavBar>
             <Main>
@@ -111,8 +121,8 @@ export const App: React.FC = () => {
                     {error && <ErrorMessage message={error}/>}
                 </Box>
                 <Box>
-                    <Summary watched={watched} />
-                    <WatchedMoviesList watched={watched} />
+                    <Summary watched={watched}/>
+                    <WatchedMoviesList watched={watched}/>
                 </Box>
             </Main>
         </>
