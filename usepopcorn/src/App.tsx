@@ -12,8 +12,8 @@ import ErrorMessage from "./components/common/ErrorMessage.tsx";
 import Search from "./components/navbar/Search.tsx";
 import {Movie} from "./interfaces/Movie.ts";
 import MovieDetails from "./components/main/movie-list/MovieDetails.tsx";
+import {API_URL} from "./constatnts.ts";
 
-const KEY = '6b0f4c12'
 
 const tempWatchedData = [
     {
@@ -48,7 +48,7 @@ async function fetchMovies(
     errorCallback("")
 
     try {
-        const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+        const res = await fetch(`${API_URL}s=${query}`)
 
         if (!res.ok) {
             throw new Error('Something went wrong with fetching movies!')
@@ -88,7 +88,7 @@ export const App: React.FC = () => {
     }, [query])
 
     const handleSelectMovie = (id: string) => {
-        setSelectedId(selectedId => selectedId === id ? null : selectedId);
+        setSelectedId(selectedId => selectedId === id ? null : id);
     }
     const handleCloseMovie = () => {
         setSelectedId(null);

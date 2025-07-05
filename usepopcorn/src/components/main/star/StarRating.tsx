@@ -20,7 +20,7 @@ const StarRating: React.FC<{
     messages?: string[],
     defaultRating?: number,
     onSetRating?: React.Dispatch<React.SetStateAction<number>>
-}> = ({onSetRating, maxRating = 5, color = '#fcc419', size = 48, className="", messages = [], defaultRating = 0}) => {
+}> = ({onSetRating, maxRating = 10, color = '#fcc419', size = 24, className="", messages = [], defaultRating = 0}) => {
     const [rating, setRating] = useState<number>(defaultRating);
     const [tempRating, setTempRating] = useState<number>(0)
     const textStyle = {
