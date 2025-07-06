@@ -41,11 +41,23 @@ const MovieDetails: React.FC<{
         fetchMovieDetails(selectedId, setMovie, setIsLoading);
     }, [selectedId]);
     useEffect(() => {
-        document.title = isMovieInfo(movie) && "MOVIE: "+movie.title;
+        document.title = isMovieInfo(movie) ? "MOVIE: "+movie.title : "usePopcorn";
         return () => {
             document.title = "usePopcorn"
         }
     }, [movie]);
+    useEffect(() => {
+        const escapeListener = (e:KeyboardEvent)=>{
+            if(e.code === 'Escape'){
+                onClose()
+            }
+        }
+
+        document.addEventListener('keydown', escapeListener);
+        return () => {
+            document.removeEventListener('keydown', escapeListener);
+        }
+    }, [onClose]);
 
     const handleAddMovie = () => {
         if(!isMovieInfo(movie))
