@@ -3,6 +3,7 @@ import {API_URL} from "../../../constatnts.ts";
 import {isMovieInfo, MovieInfo} from "../../../interfaces/MovieInfo.ts";
 import StarRating from "../star/StarRating.tsx";
 import Loader from "../../common/Loader.tsx";
+import {WatchedMovie} from "../../../interfaces/Movie.ts";
 
 async function fetchMovieDetails(id: string,
                                  movieCallback: React.Dispatch<React.SetStateAction<MovieInfo | object>>,
@@ -28,13 +29,32 @@ async function fetchMovieDetails(id: string,
 const MovieDetails: React.FC<{
     selectedId: string;
     onClose: () => void;
-}> = ({selectedId, onClose}) => {
+    onAddedWatchedMovie: (movie: WatchedMovie) => void;
+    watchedMovie?: WatchedMovie;
+}> = ({selectedId, onClose, onAddedWatchedMovie, watchedMovie}) => {
     const [movie, setMovie] = useState<MovieInfo | object>({})
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [userRating, setUserRating] = useState<number>(0)
 
     useEffect(function () {
         fetchMovieDetails(selectedId, setMovie, setIsLoading);
     }, [selectedId]);
+
+    const handleAddMovie = () => {
+        if(!isMovieInfo(movie))
+            return;
+        const newMovie: WatchedMovie = {
+            imdbRating: Number(movie.imdbRating),
+            Title: movie.title,
+            Year: movie.year,
+            Poster: movie.poster,
+            imdbID: selectedId,
+            runtime: Number(movie.runtime.split(' ').at(0)),
+            userRating
+        }
+        onAddedWatchedMovie(newMovie);
+        onClose();
+    }
 
     return (
         <div className="details">
@@ -62,7 +82,8 @@ const MovieDetails: React.FC<{
                         isMovieInfo(movie) &&
                         <section>
                             <div className="rating">
-                                <StarRating/>
+                                <StarRating onSetRating={setUserRating} defaultRating={watchedMovie?.userRating}/>
+                                {!!userRating && <button className="btn-add" onClick={handleAddMovie}>+ Add to list</button>}
                             </div>
                             <p><em>{movie.plot}</em></p>
                             <p>Starring {movie.actors}</p>

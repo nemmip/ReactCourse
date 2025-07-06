@@ -2,7 +2,7 @@ import React from 'react';
 import {WatchedMovie} from "../../../interfaces/Movie.ts";
 
 const average = (arr: number[]) =>
-    arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
+    arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0).toFixed(1);
 
 
 const Summary: React.FC<{

@@ -10,7 +10,7 @@ import WatchedMoviesList from "./components/main/watched-movies-list/WatchedMovi
 import Loader from "./components/common/Loader.tsx";
 import ErrorMessage from "./components/common/ErrorMessage.tsx";
 import Search from "./components/navbar/Search.tsx";
-import {Movie} from "./interfaces/Movie.ts";
+import {Movie, WatchedMovie} from "./interfaces/Movie.ts";
 import MovieDetails from "./components/main/movie-list/MovieDetails.tsx";
 import {API_URL} from "./constatnts.ts";
 
@@ -71,7 +71,7 @@ async function fetchMovies(
 
 export const App: React.FC = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [watched, setWatched] = useState<[]>([]);
+    const [watched, setWatched] = useState<WatchedMovie[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [query, setQuery] = useState<string>("");
@@ -93,6 +93,15 @@ export const App: React.FC = () => {
     const handleCloseMovie = () => {
         setSelectedId(null);
     }
+    const handleAddWatchedMovie = (movie: WatchedMovie) => {
+        setWatched(watched => {
+            const filtered = watched.filter(w => w.imdbID !== movie.imdbID)
+            return [...filtered, movie];
+        });
+    }
+    const handleDeleteWatched = (movieID: string) => {
+        setWatched(watched => [...watched.filter(w=> w.imdbID!==movieID)]);
+    }
 
     return (
         <>
@@ -103,15 +112,23 @@ export const App: React.FC = () => {
             <Main>
                 <Box>
                     {isLoading && <Loader/>}
-                    {!isLoading && !error && <MovieList movies={movies} onMovieSelected={handleSelectMovie}/>}
+                    {!isLoading && !error && <MovieList
+                        movies={movies}
+                        onMovieSelected={handleSelectMovie}
+                    />}
                     {error && <ErrorMessage message={error}/>}
                 </Box>
                 <Box>
                     {
-                        selectedId ? <MovieDetails selectedId={selectedId} onClose={handleCloseMovie}/> : <>
+                        selectedId ? <MovieDetails
+                            selectedId={selectedId}
+                            onClose={handleCloseMovie}
+                            onAddedWatchedMovie={handleAddWatchedMovie}
+                            watchedMovie={watched.find(w => w.imdbID === selectedId)}
+                        /> : <>
                             <Summary
                             watched={watched}/>
-                            <WatchedMoviesList watched={watched}/>
+                            <WatchedMoviesList watched={watched}  onDeleteWatched={handleDeleteWatched} />
                         </>
                     }
                 </Box>

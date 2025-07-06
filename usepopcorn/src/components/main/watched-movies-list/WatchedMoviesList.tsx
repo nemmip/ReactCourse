@@ -4,11 +4,12 @@ import WatchedMovieItem from "./WatchedMovieItem.tsx";
 
 const WatchedMoviesList: React.FC<{
     watched: WatchedMovie[];
-}> = ({watched}) => {
+    onDeleteWatched: (id: string) => void;
+}> = ({watched, onDeleteWatched}) => {
     return (
         <ul className="list">
             {watched.map((movie) => (
-                <WatchedMovieItem key={movie.imdbID} movie={movie} />
+                <WatchedMovieItem key={movie.imdbID} movie={movie} onDeleteWatched={onDeleteWatched} />
             ))}
         </ul>
     );

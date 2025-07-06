@@ -3,7 +3,8 @@ import {WatchedMovie} from "../../../interfaces/Movie.ts";
 
 const WatchedMovieItem:React.FC<{
     movie: WatchedMovie
-}> = ({movie}) => {
+    onDeleteWatched: (id: string) => void;
+}> = ({movie, onDeleteWatched}) => {
     return (
         <li key={movie.imdbID}>
             <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -21,6 +22,7 @@ const WatchedMovieItem:React.FC<{
                     <span>⏳</span>
                     <span>{movie.runtime} min</span>
                 </p>
+                <button className="btn-delete" onClick={() => onDeleteWatched(movie.imdbID)}>X</button>
             </div>
         </li>
     );
