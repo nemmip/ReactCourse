@@ -26,6 +26,7 @@ async function fetchMovieDetails(id: string,
     loadingCallback(false)
 }
 
+
 const MovieDetails: React.FC<{
     selectedId: string;
     onClose: () => void;
@@ -39,6 +40,12 @@ const MovieDetails: React.FC<{
     useEffect(function () {
         fetchMovieDetails(selectedId, setMovie, setIsLoading);
     }, [selectedId]);
+    useEffect(() => {
+        document.title = isMovieInfo(movie) && "MOVIE: "+movie.title;
+        return () => {
+            document.title = "usePopcorn"
+        }
+    }, [movie]);
 
     const handleAddMovie = () => {
         if(!isMovieInfo(movie))
@@ -55,6 +62,7 @@ const MovieDetails: React.FC<{
         onAddedWatchedMovie(newMovie);
         onClose();
     }
+
 
     return (
         <div className="details">

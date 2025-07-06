@@ -42,13 +42,14 @@ async function fetchMovies(
     query: string,
     callback: React.Dispatch<React.SetStateAction<Movie[]>>,
     loadingCallback: React.Dispatch<React.SetStateAction<boolean>>,
-    errorCallback: React.Dispatch<React.SetStateAction<string>>,) {
+    errorCallback: React.Dispatch<React.SetStateAction<string>>,
+    signal: AbortSignal) {
 
     loadingCallback(true)
     errorCallback("")
 
     try {
-        const res = await fetch(`${API_URL}s=${query}`)
+        const res = await fetch(`${API_URL}s=${query}`, {signal})
 
         if (!res.ok) {
             throw new Error('Something went wrong with fetching movies!')
@@ -62,8 +63,10 @@ async function fetchMovies(
 
         callback(data.Search);
     } catch (err) {
-        console.error(err.message);
-        errorCallback(err.message);
+        if(err.name !== "AbortError") {
+            console.error(err.message);
+            errorCallback(err.message);
+        }
     } finally {
         loadingCallback(false)
     }
@@ -79,12 +82,16 @@ export const App: React.FC = () => {
 
 
     useEffect(function () {
+        const controller = new AbortController()
         if (query.length < 3) {
             setMovies([]);
             setError("");
             return;
         }
-        fetchMovies(query, setMovies, setIsLoading, setError);
+        fetchMovies(query, setMovies, setIsLoading, setError, controller.signal);
+        return ()=> {
+            controller.abort();
+        }
     }, [query])
 
     const handleSelectMovie = (id: string) => {
