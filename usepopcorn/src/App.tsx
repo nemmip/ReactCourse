@@ -51,26 +51,14 @@ async function fetchMovies(
 
 export const App: React.FC = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [watched, setWatched] = useState<WatchedMovie[]>([]);
+    const [watched, setWatched] = useState<WatchedMovie[]>(function (){
+        const storedValue = localStorage.getItem("watched")
+        return storedValue ? JSON.parse(storedValue) : [];
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const [query, setQuery] = useState<string>("");
     const [selectedId, setSelectedId] = useState<string | null>(null);
-
-
-    useEffect(function () {
-        const controller = new AbortController()
-        if (query.length < 3) {
-            setMovies([]);
-            setError("");
-            return;
-        }
-        fetchMovies(query, setMovies, setIsLoading, setError, controller.signal);
-        return ()=> {
-            controller.abort();
-        }
-    }, [query])
-
 
     const handleSelectMovie = (id: string) => {
         setSelectedId(selectedId => selectedId === id ? null : id);
@@ -87,6 +75,23 @@ export const App: React.FC = () => {
     const handleDeleteWatched = (movieID: string) => {
         setWatched(watched => [...watched.filter(w=> w.imdbID!==movieID)]);
     }
+
+    useEffect(function () {
+        const controller = new AbortController()
+        if (query.length < 3) {
+            setMovies([]);
+            setError("");
+            return;
+        }
+        handleCloseMovie()
+        fetchMovies(query, setMovies, setIsLoading, setError, controller.signal);
+        return ()=> {
+            controller.abort();
+        }
+    }, [query])
+    useEffect(function () {
+        localStorage.setItem("watched", JSON.stringify(watched));
+    }, [watched]);
 
     return (
         <>
