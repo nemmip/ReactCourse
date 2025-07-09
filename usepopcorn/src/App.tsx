@@ -10,62 +10,28 @@ import WatchedMoviesList from "./components/main/watched-movies-list/WatchedMovi
 import Loader from "./components/common/Loader.tsx";
 import ErrorMessage from "./components/common/ErrorMessage.tsx";
 import Search from "./components/navbar/Search.tsx";
-import {Movie, WatchedMovie} from "./interfaces/Movie.ts";
+import {WatchedMovie} from "./interfaces/Movie.ts";
 import MovieDetails from "./components/main/movie-list/MovieDetails.tsx";
-import {API_URL} from "./constatnts.ts";
-
-
-async function fetchMovies(
-    query: string,
-    callback: React.Dispatch<React.SetStateAction<Movie[]>>,
-    loadingCallback: React.Dispatch<React.SetStateAction<boolean>>,
-    errorCallback: React.Dispatch<React.SetStateAction<string>>,
-    signal: AbortSignal) {
-
-    loadingCallback(true)
-    errorCallback("")
-
-    try {
-        const res = await fetch(`${API_URL}s=${query}`, {signal})
-
-        if (!res.ok) {
-            throw new Error('Something went wrong with fetching movies!')
-        }
-
-        const data = await res.json();
-
-        if (data.Response === 'False') {
-            throw new Error("Movie not found.");
-        }
-
-        callback(data.Search);
-    } catch (err) {
-        if(err.name !== "AbortError") {
-            console.error(err.message);
-            errorCallback(err.message);
-        }
-    } finally {
-        loadingCallback(false)
-    }
-}
+import {useMovies} from "./hooks/useMovies.ts";
+import {useLocalStorageState} from "./hooks/useLocalStorageState.ts";
 
 export const App: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [watched, setWatched] = useState<WatchedMovie[]>(function (){
-        const storedValue = localStorage.getItem("watched")
-        return storedValue ? JSON.parse(storedValue) : [];
-    });
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+
     const [query, setQuery] = useState<string>("");
     const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const [watched, setWatched] = useLocalStorageState<WatchedMovie[]>([], "watched");
+    const {movies, isLoading, error} = useMovies(query, handleCloseMovie)
+
 
     const handleSelectMovie = (id: string) => {
         setSelectedId(selectedId => selectedId === id ? null : id);
     }
-    const handleCloseMovie = () => {
+
+    function handleCloseMovie() {
         setSelectedId(null);
     }
+
     const handleAddWatchedMovie = (movie: WatchedMovie) => {
         setWatched(watched => {
             const filtered = watched.filter(w => w.imdbID !== movie.imdbID)
@@ -73,25 +39,9 @@ export const App: React.FC = () => {
         });
     }
     const handleDeleteWatched = (movieID: string) => {
-        setWatched(watched => [...watched.filter(w=> w.imdbID!==movieID)]);
+        setWatched(watched => [...watched.filter(w => w.imdbID !== movieID)]);
     }
 
-    useEffect(function () {
-        const controller = new AbortController()
-        if (query.length < 3) {
-            setMovies([]);
-            setError("");
-            return;
-        }
-        handleCloseMovie()
-        fetchMovies(query, setMovies, setIsLoading, setError, controller.signal);
-        return ()=> {
-            controller.abort();
-        }
-    }, [query])
-    useEffect(function () {
-        localStorage.setItem("watched", JSON.stringify(watched));
-    }, [watched]);
 
     return (
         <>
@@ -117,8 +67,8 @@ export const App: React.FC = () => {
                             watchedMovie={watched.find(w => w.imdbID === selectedId)}
                         /> : <>
                             <Summary
-                            watched={watched}/>
-                            <WatchedMoviesList watched={watched}  onDeleteWatched={handleDeleteWatched} />
+                                watched={watched}/>
+                            <WatchedMoviesList watched={watched} onDeleteWatched={handleDeleteWatched}/>
                         </>
                     }
                 </Box>

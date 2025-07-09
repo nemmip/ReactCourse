@@ -9,4 +9,5 @@ export interface WatchedMovie extends Movie {
     runtime: number;
     imdbRating: number;
     userRating: number;
+    countRatingDecisions: number;
 }

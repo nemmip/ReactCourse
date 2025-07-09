@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {API_URL} from "../../../constatnts.ts";
 import {isMovieInfo, MovieInfo} from "../../../interfaces/MovieInfo.ts";
 import StarRating from "../star/StarRating.tsx";
 import Loader from "../../common/Loader.tsx";
 import {WatchedMovie} from "../../../interfaces/Movie.ts";
+import {useKey} from "../../../hooks/useKey.ts";
 
 async function fetchMovieDetails(id: string,
                                  movieCallback: React.Dispatch<React.SetStateAction<MovieInfo | object>>,
@@ -37,30 +38,26 @@ const MovieDetails: React.FC<{
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [userRating, setUserRating] = useState<number>(0)
 
+    const countRef = useRef<number>(0)
+    useEffect(() => {
+        if (userRating)
+            countRef.current = countRef.current + 1;
+    }, [userRating]);
+
     useEffect(function () {
         fetchMovieDetails(selectedId, setMovie, setIsLoading);
     }, [selectedId]);
     useEffect(() => {
-        document.title = isMovieInfo(movie) ? "MOVIE: "+movie.title : "usePopcorn";
+        document.title = isMovieInfo(movie) ? "MOVIE: " + movie.title : "usePopcorn";
         return () => {
             document.title = "usePopcorn"
         }
     }, [movie]);
-    useEffect(() => {
-        const escapeListener = (e:KeyboardEvent)=>{
-            if(e.code === 'Escape'){
-                onClose()
-            }
-        }
 
-        document.addEventListener('keydown', escapeListener);
-        return () => {
-            document.removeEventListener('keydown', escapeListener);
-        }
-    }, [onClose]);
+    useKey("Escape", onClose)
 
     const handleAddMovie = () => {
-        if(!isMovieInfo(movie))
+        if (!isMovieInfo(movie))
             return;
         const newMovie: WatchedMovie = {
             imdbRating: Number(movie.imdbRating),
@@ -69,7 +66,8 @@ const MovieDetails: React.FC<{
             Poster: movie.poster,
             imdbID: selectedId,
             runtime: Number(movie.runtime.split(' ').at(0)),
-            userRating
+            userRating,
+            countRatingDecisions: countRef.current,
         }
         onAddedWatchedMovie(newMovie);
         onClose();
@@ -103,7 +101,8 @@ const MovieDetails: React.FC<{
                         <section>
                             <div className="rating">
                                 <StarRating onSetRating={setUserRating} defaultRating={watchedMovie?.userRating}/>
-                                {!!userRating && <button className="btn-add" onClick={handleAddMovie}>+ Add to list</button>}
+                                {!!userRating &&
+                                    <button className="btn-add" onClick={handleAddMovie}>+ Add to list</button>}
                             </div>
                             <p><em>{movie.plot}</em></p>
                             <p>Starring {movie.actors}</p>
