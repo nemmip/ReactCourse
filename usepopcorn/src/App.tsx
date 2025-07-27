@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import * as React from "react";
 import NavBar from "./components/navbar/NavBar.tsx";
 import Main from "./components/main/Main.tsx";
