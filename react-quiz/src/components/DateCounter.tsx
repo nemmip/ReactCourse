@@ -27,7 +27,6 @@ interface IDateStepActions {
 }
 
 function reducer(prevState: IDateCounterState, arg: IDateCountActions | IDateStepActions) {
-    console.log(prevState, arg);
     switch (arg.type) {
         case DateActionType.DECREASE:
             return { ...prevState, count: prevState.count - 1 };
