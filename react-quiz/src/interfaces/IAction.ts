@@ -3,6 +3,10 @@ import type {IQuestion} from "./IQuestion.ts";
 export enum ActionType {
     DATA_FAILED = 'DATA_FAILED',
     START = 'START',
+    NEXT_QUESTION = 'NEXT_QUESTION',
+    FINISH = 'FINISH',
+    RESTART = 'RESTART',
+    TICK = 'TICK',
 }
 
 export enum ActionPayloadType {
